@@ -2019,7 +2019,7 @@ weight:
 
 **镜像说明：**
 
-TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：
+TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：`
 
 | 镜像名称 | 用途 | 说明 |
 |---------|------|------|
@@ -2031,6 +2031,7 @@ TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：
 > - 需要 AI 分析功能：同时部署两个镜像
 
 ---
+
 
 #### 方式一：使用 docker-compose（推荐）
 
@@ -2058,8 +2059,7 @@ TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：
    wget https://raw.githubusercontent.com/sansan0/TrendRadar/master/docker/docker-compose.yml  -P docker/
    ```
 
-   > 💡 **说明**：Docker 部署需要的关键目录结构如下：
-```
+   > 💡 **说明**：Docker 部署需要的关键目录结构如下：```
 当前目录/
 ├── config/
 │   ├── config.yaml
@@ -2069,6 +2069,7 @@ TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：
     └── docker-compose.yml
 ```
 
+
 2. **配置文件说明**:
    - `config/config.yaml` - 应用主配置（报告模式、推送设置等）
    - `config/frequency_words.txt` - 关键词配置（设置你关心的热点词汇）
@@ -2076,20 +2077,21 @@ TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：
 
    **⚙️ 环境变量覆盖机制（v3.0.5+）**
 
-   如果你在 NAS 或其他 Docker 环境中遇到**修改 `config.yaml` 后配置不生效**的问题，可以通过环境变量直接覆盖配置：
+   如果你在 NAS 或其他 Docker 环境中遇到**修改 `config.yaml` 后配置不生效**的问题，可以通过环境变量直接覆盖配置：```
+| 环境变量 | 对应配置 | 示例值 | 说明 |
+|---------|---------|-------|------|
+| `ENABLE_CRAWLER` | `crawler.enable_crawler` | `true` / `false` | 是否启用爬虫 |
+| `ENABLE_NOTIFICATION` | `notification.enable_notification` | `true` / `false` | 是否启用通知 |
+| `REPORT_MODE` | `report.mode` | `daily` / `incremental` / `current`| 报告模式 |
+| `MAX_ACCOUNTS_PER_CHANNEL` | `notification.max_accounts_per_channel` | `3` | 每个渠道最大账号数 |
+| `PUSH_WINDOW_ENABLED` | `notification.push_window.enabled` | `true` / `false` | 推送时间窗口开关 |
+| `PUSH_WINDOW_START` | `notification.push_window.time_range.start` | `08:00` | 推送开始时间 |
+| `PUSH_WINDOW_END` | `notification.push_window.time_range.end` | `22:00` | 推送结束时间 |
+| `ENABLE_WEBSERVER` | - | `true` / `false` | 是否自动启动 Web 服务器 |
+| `WEBSERVER_PORT` | - | `8080` | Web 服务器端口（默认 8080） |
+| `FEISHU_WEBHOOK_URL` | `notification.webhooks.feishu_url` | `https://...` | 飞书 Webhook（支持多账号，用 `;` 分隔） |
 
-   | 环境变量 | 对应配置 | 示例值 | 说明 |
-   |---------|---------|-------|------|
-   | `ENABLE_CRAWLER` | `crawler.enable_crawler` | `true` / `false` | 是否启用爬虫 |
-   | `ENABLE_NOTIFICATION` | `notification.enable_notification` | `true` / `false` | 是否启用通知 |
-   | `REPORT_MODE` | `report.mode` | `daily` / `incremental` / `current`| 报告模式 |
-   | `MAX_ACCOUNTS_PER_CHANNEL` | `notification.max_accounts_per_channel` | `3` | 每个渠道最大账号数 |
-   | `PUSH_WINDOW_ENABLED` | `notification.push_window.enabled` | `true` / `false` | 推送时间窗口开关 |
-   | `PUSH_WINDOW_START` | `notification.push_window.time_range.start` | `08:00` | 推送开始时间 |
-   | `PUSH_WINDOW_END` | `notification.push_window.time_range.end` | `22:00` | 推送结束时间 |
-   | `ENABLE_WEBSERVER` | - | `true` / `false` | 是否自动启动 Web 服务器 |
-   | `WEBSERVER_PORT` | - | `8080` | Web 服务器端口（默认 8080） |
-   | `FEISHU_WEBHOOK_URL` | `notification.webhooks.feishu_url` | `https://...` | 飞书 Webhook（支持多账号，用 `;` 分隔） |
+```
 
    **配置优先级**：环境变量 > config.yaml
 
@@ -2097,6 +2099,7 @@ TrendRadar 提供两个独立的 Docker 镜像，可根据需求选择部署：
    - 修改 `.env` 文件，取消注释并填写需要的配置
    - 或在 NAS/群晖 Docker 管理界面的"环境变量"中直接添加
    - 重启容器后生效：`docker-compose up -d`
+
 
 
 3. **启动服务**:

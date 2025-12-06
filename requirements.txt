@@ -1,5 +1,19 @@
+# 使用 pip 安装依赖:
+# pip install -r requirements.txt
+#
+# 使用 uv 安装依赖 (更快):
+# uv pip install -r requirements.txt
+#
+# 使用 uv 创建虚拟环境并安装依赖:
+# uv venv
+# source .venv/bin/activate  (Linux/macOS)
+# .venv\Scripts\activate     (Windows)
+# uv pip install -r requirements.txt
+
 requests>=2.32.5,<3.0.0
 pytz>=2025.2,<2026.0
 PyYAML>=6.0.3,<7.0.0
 fastmcp>=2.12.0,<2.14.0
 websockets>=13.0,<14.0
+flask>=3.0.0,<4.0.0
+flask-cors>=5.0.0,<6.0.0
