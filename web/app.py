@@ -110,7 +110,7 @@ def get_news_files(date):
         
         html_dir = date_dir / 'html'
         if html_dir.exists():
-            files = sorted([f.name for f in html_dir.iterdir() if f.is_file()])
+            files = sorted([f.name for f in html_dir.iterdir() if f.is_file()], reverse=True)
         
         return files
     except Exception as e:

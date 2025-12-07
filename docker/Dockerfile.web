@@ -43,6 +43,9 @@ ENV PYTHONUNBUFFERED=1 \
 # 复制前端文件（包括已构建的文件）
 COPY web/ ./web/
 
+# 复制entrypoint-my.sh文件
+COPY docker/entrypoint-my.sh /app/entrypoint-my.sh
+
 # 创建非root用户
 RUN addgroup -g 1001 -S nodejs \
     && adduser -S nextjs -u 1001
