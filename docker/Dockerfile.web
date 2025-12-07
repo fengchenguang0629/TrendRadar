@@ -1,0 +1,57 @@
+# 使用Node.js作为基础镜像，同时安装Python环境
+FROM node:18-alpine
+
+# 设置工作目录
+WORKDIR /app
+
+# 安装Python和相关工具
+RUN apk add --no-cache python3 py3-pip curl
+
+# 创建虚拟环境
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# 复制主服务文件
+COPY main.py .
+COPY docker/manage.py .
+COPY docker/entrypoint.sh /app/entrypoint.sh.tmp
+COPY requirements.txt .
+
+# 修复Windows换行符问题
+RUN sed -i 's/\r$//' /app/entrypoint.sh.tmp && \
+    mv /app/entrypoint.sh.tmp /app/entrypoint.sh && \
+    chmod +x /app/entrypoint.sh
+
+# 安装Python依赖（在虚拟环境中）
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 安装supercronic（Alpine版本）
+ENV SUPERCRONIC_VERSION=v0.2.39
+RUN curl -fsSLO https://github.com/aptible/supercronic/releases/download/${SUPERCRONIC_VERSION}/supercronic-linux-amd64 \
+    && chmod +x supercronic-linux-amd64 \
+    && mv supercronic-linux-amd64 /usr/local/bin/supercronic
+
+# 设置权限（在复制所有文件后）
+RUN chmod +x manage.py \
+    && mkdir -p /app/config /app/output
+
+# 设置环境变量
+ENV PYTHONUNBUFFERED=1 \
+    CONFIG_PATH=/app/config/config.yaml \
+    FREQUENCY_WORDS_PATH=/app/config/frequency_words.txt
+
+# 复制前端文件（包括已构建的文件）
+COPY web/ ./web/
+
+# 创建非root用户
+RUN addgroup -g 1001 -S nodejs \
+    && adduser -S nextjs -u 1001
+
+# 更改文件所有权
+RUN chown -R nextjs:nodejs /app
+
+# 暴露端口 (Web服务器端口和API端口)
+EXPOSE 5000 8080 5173
+
+# 启动命令（使用绝对路径）
+ENTRYPOINT ["/app/entrypoint-my.sh"]
